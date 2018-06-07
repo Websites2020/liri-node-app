@@ -1,35 +1,81 @@
 require("dotenv").config();
+var fs = require("fs");
+var Twitter = require('twitter');
+var request = require("request");
+var Spotify = require('node-spotify-api');
 
-//Add the code required to import the keys.js file and store it in a variable
+fs.readFile("key.js", "utf8", function(error, data) {
+ 
+var a = process.argv[2]
 
-var spotify = new Spotify(keys.spotify);
-var client = new Twitter(keys.twitter);
+if (a === "my-tweets") {
 
+var client = new Twitter({
+    consumer_key: process.env.TWITTER_CONSUMER_KEY,
+    consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
+    access_token_key: process.env.TWITTER_ACCESS_TOKEN_KEY,
+    access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
+  });
+   
+  var params = {screen_name: 'nodejs'};
+  client.get('statuses/user_timeline', params, function(error, tweets, response) {
+    if (!error) {
+      console.log(tweets);
+    }
+  });
+}
 
-//Make it so liri.js can take in one of the following commands:
-// * `my-tweets`
-// This will show your last 20 tweets and when they were created at in your terminal/bash window.
+if (a === "spotify-this-song") {
 
-// * `spotify-this-song`
-// This will show the following information about the song in your terminal/bash window
-// Artist(s)
-// The song's name
-// A preview link of the song from Spotify
-// The album that the song is from
-//If no song is provided then your program will default to "The Sign" by Ace of Base.
+    var b = process.argv[3]
+ 
+var spotify = new Spotify({
+  id: process.env.SPOTIFY_ID,
+  secret: process.env.SPOTIFY_SECRET
+});
+ 
+spotify.search({ type: 'track', query: b }, function(err, data) {
+  if (err) {
+    return console.log('Error occurred: ' + err);
+  }
+ 
+console.log(data); 
+});
 
-// * `movie-this`
-//This will output the following information to your terminal/bash window:
-// * Title of the movie.
-// * Year the movie came out.
-// * IMDB Rating of the movie.
-// * Rotten Tomatoes Rating of the movie.
-// * Country where the movie was produced.
-// * Language of the movie.
-// * Plot of the movie.
-// * Actors in the movie.
-// if the user doesn't type a movie in, the program will output data for the movie 'Mr. Nobody.'
-// You'll use the request package to retrieve data from the OMDB API. Like all of the in-class activities, the OMDB API requires an API key. You may use trilogy.
+} else {
+
+    var spotify = new Spotify({
+        id: process.env.SPOTIFY_ID,
+        secret: process.env.SPOTIFY_SECRET
+      });
+       
+      spotify.search({ type: 'track', query: 'the sign' }, function(err, data) {
+        if (err) {
+          return console.log('Error occurred: ' + err);
+        }
+})}});
+
+if (a === "movie-this") {
+
+var title = process.argv[3];
+
+request("http://www.omdbapi.com/?t=" + title + "&y=&plot=short&apikey=trilogy", function(error, response, body) {
+
+    if (!error) {
+        return console.log(body);
+        return console.log(body.Title + body.Year + body.imdbRating + body.Ratings + body.Country + body.Language + body.Plot + body.Actors);
+      }
+
+})};
+
+var a = process.argv[2];
+
+if (a === "do-what-it-says") {
+
+    fs.readFile("random.txt", "utf8", function(error, data) {
+        console.log(data);
+    })
+}
 
 // * `do-what-it-says`
 // Using the fs Node package, LIRI will take the text inside of random.txt and then use it to call one of LIRI's commands.

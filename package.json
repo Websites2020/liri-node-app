@@ -16,5 +16,12 @@
   "bugs": {
     "url": "https://github.com/sumofitsparts/liri-node-app/issues"
   },
-  "homepage": "https://github.com/sumofitsparts/liri-node-app#readme"
+  "homepage": "https://github.com/sumofitsparts/liri-node-app#readme",
+  "dependencies": {
+    "dotenv": "^6.0.0",
+    "fs": "0.0.1-security",
+    "jquery": "^3.3.1",
+    "node-spotify-api": "^1.0.7",
+    "twitter": "^1.7.1"
+  }
 }
