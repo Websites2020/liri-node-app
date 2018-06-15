@@ -3,10 +3,13 @@ var fs = require("fs");
 var Twitter = require('twitter');
 var request = require("request");
 var Spotify = require('node-spotify-api');
+var Keys = require("./key.js");
+
 
 fs.readFile("key.js", "utf8", function(error, data) {
  
 var a = process.argv[2]
+
 
 if (a === "my-tweets") {
 
@@ -17,13 +20,17 @@ var client = new Twitter({
     access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
   });
    
-  var params = {screen_name: 'nodejs'};
+  var params = {screen_name: "MyTweet18518181"};
   client.get('statuses/user_timeline', params, function(error, tweets, response) {
     if (!error) {
-      console.log(tweets);
+      for (i=0; i <= 4; i++) {
+      console.log(tweets[i].text);
+      }
     }
   });
 }
+
+//node liri.js spotify-this-song '<song name here>'
 
 if (a === "spotify-this-song") {
 
@@ -38,11 +45,12 @@ spotify.search({ type: 'track', query: b }, function(err, data) {
   if (err) {
     return console.log('Error occurred: ' + err);
   }
- 
-console.log(data); 
+
+  //this returns weird data
+    console.log(data.tracks.items[0].artists[0]); 
 });
 
-} else {
+} else if (b === false) {
 
     var spotify = new Spotify({
         id: process.env.SPOTIFY_ID,
@@ -53,6 +61,9 @@ console.log(data);
         if (err) {
           return console.log('Error occurred: ' + err);
         }
+
+        //this returns error message
+        console.log(data)
 })}});
 
 if (a === "movie-this") {
@@ -62,11 +73,27 @@ var title = process.argv[3];
 request("http://www.omdbapi.com/?t=" + title + "&y=&plot=short&apikey=trilogy", function(error, response, body) {
 
     if (!error) {
+      //this does nothing
         return console.log(body);
-        return console.log(body.Title + body.Year + body.imdbRating + body.Ratings + body.Country + body.Language + body.Plot + body.Actors);
+        // return console.log(body.Title + body.Year + body.imdbRating + body.Ratings + body.Country + body.Language + body.Plot + body.Actors);
       }
 
-})};
+})
+
+if (title === "") {
+
+  request("http://www.omdbapi.com/?t=it&y=&plot=short&apikey=trilogy", function(error, response, body) {
+
+    if (!error) {
+
+      console.log(body);
+
+    }
+});
+
+};
+
+};
 
 var a = process.argv[2];
 
