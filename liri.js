@@ -86,22 +86,24 @@
   request("http://www.omdbapi.com/?t=" + title + "&y=&plot=short&apikey=trilogy", function(error, response, body) {
 
       if (!error) {
+        var results =JSON.parse(body)
+        // console.log(results)
           // * Title of the movie.
-      console.log(body[0].Title);
+      console.log(results.Title);
       //  * Year the movie came out.
-      console.log(body.Year);
+      console.log(results.Year);
       //  * IMDB Rating of the movie.
-      console.log(body.imdbRating);
+      console.log(results.imdbRating);
       //  * Rotten Tomatoes Rating of the movie.
-      console.log(body.Ratings);
+      console.log(results.Ratings[1].Value);
       //  * Country where the movie was produced.
-      console.log(body.Country);
+      console.log(results.Country);
       //  * Language of the movie.
-      console.log(body.Language);
+      console.log(results.Language);
       //  * Plot of the movie.
-      console.log(body.Plot);
+      console.log(results.Plot);
       //  * Actors in the movie.
-      console.log(body.Actors);
+      console.log(results.Actors);
           // return console.log(body.Title + body.Year + body.imdbRating + body.Ratings + body.Country + body.Language + body.Plot + body.Actors);
         } else {
 
@@ -119,17 +121,16 @@
 
       fs.readFile("random.txt", "utf8", function(error, data) {
           console.log(data);
-                   
-          if (process.argv[0] == "spotify-this-song") {
-
-            var x = process.argv[1]
+           var x = data.split(", ");
+           console.log(x);       
+          if (x[0] == "spotify-this-song") {
 
             var spotify = new Spotify({
               id: process.env.SPOTIFY_ID,
               secret: process.env.SPOTIFY_SECRET
             });
             
-            spotify.search({ type: 'track', query: x }, function(err, data) {
+            spotify.search({ type: 'track', query: x[1] }, function(err, data) {
               if (err) {
                 return console.log('Error occurred: ' + err);
               }
