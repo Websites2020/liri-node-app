@@ -146,6 +146,62 @@
             
 
           }
+          
+          if (x[0] == "movie-this") {
+
+            var title = x[1];
+  
+            if (title === ""){
+              title = "mr.nobody"
+            }
+            request("http://www.omdbapi.com/?t=" + title + "&y=&plot=short&apikey=trilogy", function(error, response, body) {
+          
+                if (!error) {
+                  var results =JSON.parse(body)
+                  // console.log(results)
+                    // * Title of the movie.
+                console.log(results.Title);
+                //  * Year the movie came out.
+                console.log(results.Year);
+                //  * IMDB Rating of the movie.
+                console.log(results.imdbRating);
+                //  * Rotten Tomatoes Rating of the movie.
+                console.log(results.Ratings[1].Value);
+                //  * Country where the movie was produced.
+                console.log(results.Country);
+                //  * Language of the movie.
+                console.log(results.Language);
+                //  * Plot of the movie.
+                console.log(results.Plot);
+                //  * Actors in the movie.
+                console.log(results.Actors);
+                    // return console.log(body.Title + body.Year + body.imdbRating + body.Ratings + body.Country + body.Language + body.Plot + body.Actors);
+                  }
+
+          }
+
+        )}
+
+        if (x[0] == "my-tweets") {
+
+          var client = new Twitter({
+            consumer_key: process.env.TWITTER_CONSUMER_KEY,
+            consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
+            access_token_key: process.env.TWITTER_ACCESS_TOKEN_KEY,
+            access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
+          });
+          
+          var params = {screen_name: "MyTweet18518181"};
+          client.get('statuses/user_timeline', params, function(error, tweets, response) {
+            if (!error) {
+              for (i=0; i <= 4; i++) {
+              console.log(tweets[i].text);
+              }
+            }
+          });
+
+        }
+
       })
 
   }
